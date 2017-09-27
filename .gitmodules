@@ -1,0 +1,12 @@
+[submodule "RFCN-tensorflow"]
+	path = RFCN-tensorflow
+	url = git@github.com:eljefec/RFCN-tensorflow.git
+[submodule "keras-frcnn"]
+	path = keras-frcnn
+	url = git@github.com:eljefec/keras-frcnn.git
+[submodule "labelImg"]
+	path = labelImg
+	url = git@github.com:eljefec/labelImg.git
+[submodule "challenge2-evaluation"]
+	path = challenge2-evaluation
+	url = https://github.com/getnexar/challenge2-evaluation.git
