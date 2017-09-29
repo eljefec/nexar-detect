@@ -167,6 +167,16 @@ def nexet_to_pascal_voc():
                              val_file='/home/eljefec/data/nexet/ImageSets/Main/test.txt',
                              train_file='/home/eljefec/data/nexet/ImageSets/Main/trainval.txt')
 
+def write_pascal_voc_csv(img_folder, pascal_folder, pascal_csv):
+    with open(pascal_csv, 'w') as write_f:
+        print(img_folder, file = write_f)
+
+        for filename in os.listdir(pascal_folder):
+            if not filename.lower().endswith(('.xml')):
+                continue
+            pascal_path = os.path.join(pascal_folder, filename)
+            print(pascal_path, file = write_f)
+
 #    print('write_to_pascal_voc')
 #    builder.write_to_pascal_voc('/home/eljefec/data/nexet/train_pascal.csv',
 #                                '/home/eljefec/data/nexet/train_pascal')

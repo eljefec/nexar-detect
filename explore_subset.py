@@ -1,4 +1,5 @@
 from shutil import copyfile
+from nexet_to_pascal_voc import write_pascal_voc_csv
 import os
 
 def makedirs(folder):
@@ -36,5 +37,11 @@ def copy():
                 '/home/eljefec/data/nexet/val',
                 '/home/eljefec/data/nexet/val_pascal')
 
+def write_val_pascal_voc():
+    write_pascal_voc_csv('/home/eljefec/data/nexet/val',
+                         '/home/eljefec/data/nexet/val_pascal',
+                         '/home/eljefec/data/nexet/val_pascal.csv')
+
 if __name__ == '__main__':
-    copy()
+    # copy()
+    write_val_pascal_voc()
