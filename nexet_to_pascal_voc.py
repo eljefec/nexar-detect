@@ -111,6 +111,7 @@ class DatasetBuilder:
             for line in f:
                 line = line.strip()
                 reader = PascalVocReader(line)
+                filename = os.path.splitext(os.path.basename(reader.filepath))[0] + '.jpg'
                 fullpath = os.path.join(self.foldername, os.path.splitext(os.path.basename(reader.filepath))[0] + '.jpg')
                 for shape in reader.getShapes():
                     class_name = shape[0]
@@ -120,7 +121,7 @@ class DatasetBuilder:
                     x2 = points[2][0]
                     y2 = points[2][1]
                     box = Box(class_name, x1, y1, x2, y2)
-                    yield reader.filepath, fullpath, box
+                    yield filename, fullpath, box
 
     def _gen_from_nexet(self, img_boxes_csv, img_folder):
         assert(os.path.exists(img_folder))
