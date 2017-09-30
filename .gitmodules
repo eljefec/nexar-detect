@@ -9,4 +9,4 @@
 	url = git@github.com:eljefec/labelImg.git
 [submodule "challenge2-evaluation"]
 	path = challenge2_evaluation
-	url = https://github.com/getnexar/challenge2-evaluation.git
+	url = git@github.com:eljefec/challenge2-evaluation.git
