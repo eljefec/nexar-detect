@@ -97,7 +97,7 @@ p35
 F0.3
 sS'model_path'
 p36
-S'/home/eljefec/data/nexet/frcnn/2-label/model_frcnn_e406_vl0.331.hdf5'
+S'keras_frcnn_lib/model_frcnn.hdf5'
 p37
 sS'classifier_max_overlap'
 p38

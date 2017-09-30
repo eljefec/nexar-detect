@@ -29,7 +29,7 @@ def detect_folder(model, img_folder, dt_csv):
 
 def detect_val_frcnn():
     site.addsitedir('./keras_frcnn_lib')
-    for bbox_threshold in [0.7, 0.6, 0.4, 0.2]:
+    for bbox_threshold in [0.5, 0.3, 0.1]:
         frcnn = FRCNNTester('config.pickle', NUM_ROIS, bbox_threshold)
         dt_csv = '/home/eljefec/data/nexet/dt/val_dt_frcnn_bb{}.csv'.format(bbox_threshold)
         detect_folder(frcnn, '/home/eljefec/data/nexet/val', dt_csv)
@@ -73,5 +73,5 @@ def groundtruth_val():
 if __name__ == '__main__':
     # detect_val()
     # groundtruth_val()
-    # try_detect_val(detect_val_frcnn, 'exp_frcnn_bbox.txt')
-    try_detect_val(detect_val_rfcn, 'exp_rfcn_bbox.txt')
+    try_detect_val(detect_val_frcnn, 'exp_frcnn_bbox0.1.txt')
+    # try_detect_val(detect_val_rfcn, 'exp_rfcn_bbox.txt')
