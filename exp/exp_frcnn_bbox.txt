@@ -1,4 +1,7 @@
 /home/eljefec/data/nexet/dt/val_dt_frcnn_bb0.7.csv: 0.286681808865
 /home/eljefec/data/nexet/dt/val_dt_frcnn_bb0.6.csv: 0.292372781529
+/home/eljefec/data/nexet/dt/val_dt_frcnn_bb0.5.csv: 0.309095749311
 /home/eljefec/data/nexet/dt/val_dt_frcnn_bb0.4.csv: 0.295887411522
 /home/eljefec/data/nexet/dt/val_dt_frcnn_bb0.2.csv: 0.296025546877
+/home/eljefec/data/nexet/dt/val_dt_frcnn_bb0.5_config.e347.pickle.csv: 0.320055618593
+/home/eljefec/data/nexet/dt/val_dt_frcnn_bb0.5_config.latest.pickle.csv: 0.333889645638

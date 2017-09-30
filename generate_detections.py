@@ -5,50 +5,63 @@ from nexet_to_pascal_voc import DatasetBuilder
 import os
 import cv2
 import site
+import time
 
 HEADER = 'image_filename,x0,y0,x1,y1,label,confidence'
 NUM_ROIS = 32
 
-def detect_folder(model, img_folder, dt_csv):
+def detect_folder(model, img_folder, dt_csv, bbox_threshold):
     count = 0
     with open(dt_csv, 'w') as f:
         print(HEADER, file=f)
         for img_name in os.listdir(img_folder):
             if not img_name.lower().endswith(('.bmp', '.jpeg', '.jpg', '.png', '.tif', '.tiff')):
                 continue
-            print('{}: {}'.format(count, img_name))
             filepath = os.path.join(img_folder, img_name)
 
+            imread_start = time.time()
             img = cv2.imread(filepath)
-            pred_boxes = model.predict(img)
+            pred_start = time.time()
+            pred_boxes = model.predict(img, bbox_threshold)
+            pred_end = time.time()
+            if count % 100 == 0:
+                print('[{0:.2f}, {0:.2f}] {}: {}'.format(pred_start - imread_start,
+                                                         pred_end - pred_start,
+                                                         count, img_name))
 
             for box in pred_boxes:
                 print('{},{},{},{},{},{},{}'.format(img_name, box.x1, box.y1, box.x2, box.y2, box.class_name, box.prob), file=f)
 
             count += 1
 
-def detect_val_frcnn():
-    site.addsitedir('./keras_frcnn_lib')
-    for bbox_threshold in [0.7, 0.6, 0.4, 0.2]:
-        frcnn = FRCNNTester('config.pickle', NUM_ROIS, bbox_threshold)
-        dt_csv = '/home/eljefec/data/nexet/dt/val_dt_frcnn_bb{}.csv'.format(bbox_threshold)
-        detect_folder(frcnn, '/home/eljefec/data/nexet/val', dt_csv)
-        yield dt_csv
+def gen_detect_frcnn(val):
+    if val:
+        img_folder = '/home/eljefec/data/nexet/val'
+    else:
+        img_folder = '/home/eljefec/data/nexet/test'
 
-def detect_val_rfcn():
+    site.addsitedir('./keras_frcnn_lib')
+    for config in ['config/config.e347.pickle', 'config/config.latest.pickle']:
+        frcnn = FRCNNTester(config, NUM_ROIS)
+        for bbox_threshold in [0.5]:
+            dt_csv = '/home/eljefec/data/nexet/dt/test_dt_frcnn_bb{}_{}.csv'.format(bbox_threshold, config)
+            detect_folder(frcnn, img_folder, dt_csv, bbox_threshold)
+            yield dt_csv
+
+def gen_detect_rfcn():
     site.addsitedir('./RFCN_tensorflow')
     from RFCN_tensorflow.test import RFCNTester
-    for bbox_threshold in [0.6, 0.7, 0.8, 0.9]:
+    for bbox_threshold in [0.0, 0.1]:
         rfcn = RFCNTester('RFCN_tensorflow/save/save', None, bbox_threshold)
         dt_csv = '/home/eljefec/data/nexet/dt/val_dt_rfcn_bb{}.csv'.format(bbox_threshold)
-        detect_folder(rfcn, '/home/eljefec/data/nexet/val', dt_csv)
+        detect_folder(rfcn, '/home/eljefec/data/nexet/val', dt_csv, bbox_threshold)
         yield dt_csv
 
-def try_detect_val(detect_val_func, report_filename):
+def try_detect_val(dt_csv_gen, report_filename):
     iou_threshold = 0.75
     with open(report_filename, 'w') as write_f:
         gt_csv = '/home/eljefec/data/nexet/val_gt.csv'
-        for dt_csv in detect_val_func():
+        for dt_csv in dt_csv_gen:
             ap = eval_detector_csv(gt_csv, dt_csv, iou_threshold)
             report = '{}: {}'.format(dt_csv, ap)
             print(report, file=write_f)
@@ -73,5 +86,5 @@ def groundtruth_val():
 if __name__ == '__main__':
     # detect_val()
     # groundtruth_val()
-    # try_detect_val(detect_val_frcnn, 'exp_frcnn_bbox.txt')
-    try_detect_val(detect_val_rfcn, 'exp_rfcn_bbox.txt')
+    try_detect_val(gen_detect_frcnn(val = True), 'exp_frcnn_bbox0.0.txt')
+    # try_detect_val(gen_detect_rfcn(), 'exp_rfcn_bbox.txt')
