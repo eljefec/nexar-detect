@@ -77,6 +77,14 @@ class DatasetBuilder:
     def read_from_pascal_voc(self, pascal_csv):
         self._read_from_generator(self._gen_from_pascal_voc(pascal_csv))
 
+    def write_to_nexet(self, nexet_csv):
+        HEADER = 'image_filename,x0,y0,x1,y1,label,confidence'
+        with open(nexet_csv, 'w') as f:
+            print(HEADER, file=f)
+            for filename, ex in self.examples.iteritems():
+                for box in ex.boxes:
+                    print('{},{},{},{},{},{},{}'.format(ex.filename, box.x1, box.y1, box.x2, box.y2, box.class_name, 1.0), file=f)
+
     def write_to_pascal_voc(self, pascal_csv, pascal_folder):
         assert(len(self.examples) > 0)
         assert(self.foldername is not None)
@@ -112,7 +120,7 @@ class DatasetBuilder:
                 line = line.strip()
                 reader = PascalVocReader(line)
                 filename = os.path.splitext(os.path.basename(reader.filepath))[0] + '.jpg'
-                fullpath = os.path.join(self.foldername, os.path.splitext(os.path.basename(reader.filepath))[0] + '.jpg')
+                fullpath = os.path.join(self.foldername, filename)
                 for shape in reader.getShapes():
                     class_name = shape[0]
                     points = shape[1]
@@ -168,6 +176,13 @@ def nexet_to_pascal_voc():
                              val_file='/home/eljefec/data/nexet/ImageSets/Main/test.txt',
                              train_file='/home/eljefec/data/nexet/ImageSets/Main/trainval.txt')
 
+def pascal_voc_to_nexet():
+    builder = DatasetBuilder()
+    builder.read_from_pascal_voc('/home/eljefec/data/nexet/train_pascal.csv')
+    print('{} read from pascal'.format(len(builder.examples)))
+    builder.write_to_nexet('/home/eljefec/data/nexet/train_boxes_60c87b87.csv')
+    print('Wrote to nexet format.')
+
 def write_pascal_voc_csv(img_folder, pascal_folder, pascal_csv):
     with open(pascal_csv, 'w') as write_f:
         print(img_folder, file = write_f)
@@ -190,4 +205,5 @@ def write_pascal_voc_csv(img_folder, pascal_folder, pascal_csv):
 #    print('{} read from pascal'.format(len(other_builder.examples)))
 
 if __name__ == '__main__':
-    nexet_to_pascal_voc()
+    # nexet_to_pascal_voc()
+    pascal_voc_to_nexet()
