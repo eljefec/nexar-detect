@@ -1,5 +1,5 @@
 [submodule "RFCN-tensorflow"]
-	path = RFCN-tensorflow
+	path = RFCN_tensorflow
 	url = git@github.com:eljefec/RFCN-tensorflow.git
 [submodule "keras-frcnn"]
 	path = keras_frcnn_lib
