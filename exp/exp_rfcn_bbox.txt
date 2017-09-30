@@ -1,0 +1,4 @@
+/home/eljefec/data/nexet/dt/val_dt_rfcn_bb0.6.csv: 0.149841042599
+/home/eljefec/data/nexet/dt/val_dt_rfcn_bb0.7.csv: 0.13726866197
+/home/eljefec/data/nexet/dt/val_dt_rfcn_bb0.8.csv: 0.116968085468
+/home/eljefec/data/nexet/dt/val_dt_rfcn_bb0.9.csv: 0.0795780963541
