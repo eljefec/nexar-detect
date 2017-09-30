@@ -29,17 +29,17 @@ def detect_folder(model, img_folder, dt_csv):
 
 def detect_val():
     site.addsitedir('./keras_frcnn_lib')
-    for bbox_threshold in [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]:
-        frcnn = FRCNNTester('config.pickle', NUM_ROIS)
+    for bbox_threshold in [0.7, 0.6, 0.4, 0.2]:
+        frcnn = FRCNNTester('config.pickle', NUM_ROIS, bbox_threshold)
         dt_csv = '/home/eljefec/data/nexet/dt/val_dt_frcnn_bb{}.csv'.format(bbox_threshold)
         detect_folder(frcnn, '/home/eljefec/data/nexet/val', dt_csv)
         yield dt_csv
 
 def try_detect_val():
+    iou_threshold = 0.75
     with open('exp_frcnn_bbox.txt', 'w') as write_f:
         gt_csv = '/home/eljefec/data/nexet/val_gt.csv'
         for dt_csv in detect_val():
-            iou_threshold = 0.75
             ap = eval_detector_csv(gt_csv, dt_csv, iou_threshold)
             report = '{}: {}'.format(dt_csv, ap)
             print(report, file=write_f)
